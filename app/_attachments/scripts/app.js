@@ -12,12 +12,16 @@ angular.module('MovieApp', ['ngRoute'])
                 redirectTo: '/home'
             });
     })
-    .controller('homeCtrl', function(getServ){
+    .controller('homeCtrl', function($scope, getServ){
     	$("#buttonID").click(function (event){
-    		getServ.getMovies();
+    		getServ.getMovies().then(function (data){
+    			var dataString = data + "";
+    			$scope.titel = dataString;
+    		})
     	})
     })
-    .service('getServ', function(){
+    .service('getServ', function($q){
+    	var q = $q.defer();
     	this.getMovies = function(){
     		var url = 'http://theimdbapi.org/api/find/person?name=' + $('#inputID').val();
     		$.get(url).then(function (data){
@@ -26,8 +30,9 @@ angular.module('MovieApp', ['ngRoute'])
     			for (var j = 0; j < dataActor.length; j++){
     				titels.push(dataActor[j].title);
     			}
-    			console.log(titels);
-    		})
+    			q.resolve(titels);	
+    		}, function error (err){ q.reject(err); });
+    		return q.promise;
     	}
     	/*
     	var q = $q.defer();
