@@ -14,13 +14,20 @@ angular.module('MovieApp', ['ngRoute'])
     })
     .controller('homeCtrl', function(getServ){
     	$("#buttonID").click(function (event){
-    		getServ.getActor();
+    		getServ.getMovies();
     	})
     })
     .service('getServ', function(){
-    	this.getActor = function(){
+    	this.getMovies = function(){
     		var url = 'http://theimdbapi.org/api/find/person?name=' + $('#inputID').val();
-    		console.log(url);
+    		$.get(url).then(function (data){
+    			var dataActor = data[0].filmography.actor
+    			var titels = [];
+    			for (var j = 0; j < dataActor.length; j++){
+    				titels.push(dataActor[j].title);
+    			}
+    			console.log(titels);
+    		})
     	}
     	/*
     	var q = $q.defer();
