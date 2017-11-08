@@ -18,7 +18,7 @@ angular.module('MovieApp', ['ngRoute'])
     			var jsonobj = JSON.parse(data);
     			if (jsonobj._id == $('#inputID').val()){
     				$scope.titel = jsonobj.movies + "";
-    				console.log("Checked en in Database.");
+    				console.log("Checked en in Database. Data opgehaald out CouchDB");
     			}
     			else {
     	    		getServ.getMovies().then(function (data){
